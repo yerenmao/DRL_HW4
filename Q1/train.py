@@ -30,27 +30,27 @@ def train(num_episodes, checkpoint_dir):
             obs = next_obs
             agent.train()
 
-    history.append(total_reward)
+        history.append(total_reward)
 
-    # Every 50 episodes: print & save
-    if ep % 50 == 0:
-        avg_reward = np.mean(history[-50:])
-        elapsed_time = time.time() - start_time
-        print(f"[Episode {ep}] AvgReward: {avg_reward:.2f} | Time Elapsed: {elapsed_time:.2f}s")
+        # Every 50 episodes: print & save
+        if ep % 50 == 0:
+            avg_reward = np.mean(history[-50:])
+            elapsed_time = time.time() - start_time
+            print(f"[Episode {ep}] AvgReward: {avg_reward:.2f} | Time Elapsed: {elapsed_time:.2f}s")
 
-        # Save checkpoint
-        torch.save(agent.actor.state_dict(), os.path.join(checkpoint_dir, f"actor_ep{ep}.pth"))
-        torch.save(agent.critic1.state_dict(), os.path.join(checkpoint_dir, f"critic1_ep{ep}.pth"))
-        torch.save(agent.critic2.state_dict(), os.path.join(checkpoint_dir, f"critic2_ep{ep}.pth"))
+            # Save checkpoint
+            torch.save(agent.actor.state_dict(), os.path.join(checkpoint_dir, f"actor_ep{ep}.pth"))
+            torch.save(agent.critic1.state_dict(), os.path.join(checkpoint_dir, f"critic1_ep{ep}.pth"))
+            torch.save(agent.critic2.state_dict(), os.path.join(checkpoint_dir, f"critic2_ep{ep}.pth"))
 
-        # Save best model
-        if avg_reward > best_avg_reward:
-            best_avg_reward = avg_reward
-            torch.save(agent.actor.state_dict(), os.path.join(checkpoint_dir, "best_actor.pth"))
-            print(f"✅ New best model saved with AvgReward: {avg_reward:.2f}")
-        
-        # Plot learning curve
-        plot_rewards(history, title="SAC Training Rewards")
+            # Save best model
+            if avg_reward > best_avg_reward:
+                best_avg_reward = avg_reward
+                torch.save(agent.actor.state_dict(), os.path.join(checkpoint_dir, "best_actor.pth"))
+                print(f"✅ New best model saved with AvgReward: {avg_reward:.2f}")
+            
+            # Plot learning curve
+            plot_rewards(history, title="SAC Training Rewards")
 
 if __name__=='__main__':
     checkpoint_dir='ckpt'
