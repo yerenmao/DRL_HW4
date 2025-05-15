@@ -11,7 +11,7 @@ ALPHA_LR            = 3e-4     # Learning rate for entropy coefficient α
 
 TARGET_ENTROPY      = -1.0
 
-TOTAL_EPISODES      = 500
+TOTAL_EPISODES      = 200
 EPISODE_MAX_STEP    = 1000
 HIDDEN_LAYER_SIZE   = 64
 LOG_STD_MIN         = -20

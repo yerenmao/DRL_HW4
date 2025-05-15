@@ -30,13 +30,6 @@ class Agent:
             action, _ = self.actor.sample(x)
         return action.cpu().numpy().reshape(-1)
 
-    def act_eval(self, observation):
-        x = torch.tensor(observation, dtype=torch.float32, device=self.device).unsqueeze(0)
-        with torch.no_grad():
-            mu, _ = self.actor(x)
-            action = torch.tanh(mu) * 2.0
-        return action.cpu().numpy().reshape(-1)
-
     def train(self):
         if len(self.memory) < BATCH_SIZE:
             return
