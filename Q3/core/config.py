@@ -3,7 +3,7 @@ ACTION_DIM          = 21
 GAMMA               = 0.99     # Discount factor for future rewardsD
 TAU                 = 0.005    # Soft update rate for target networks
 BATCH_SIZE          = 256      # Mini-batch size for sampling from replay buffer
-REPLAY_BUFFER_SIZE  = 300000   # Capacity of the replay buffer
+REPLAY_BUFFER_SIZE  = 1000000   # Capacity of the replay buffer
 
 ACTOR_LR            = 3e-4     # Learning rate for the actor (policy) network
 CRITIC_LR           = 3e-4     # Learning rate for the critic (Q-value) networks

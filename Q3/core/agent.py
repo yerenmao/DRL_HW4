@@ -48,12 +48,16 @@ class Agent:
         # Q1 loss
         q1 = self.critic1(s, a)
         loss_q1 = F.mse_loss(q1, target)
-        self.critic1.optimizer.zero_grad(); loss_q1.backward(); self.critic1.optimizer.step()
+        self.critic1.optimizer.zero_grad(); loss_q1.backward()
+        torch.nn.utils.clip_grad_norm_(self.critic1.parameters(), max_norm=1.0)
+        self.critic1.optimizer.step()
 
         # Q2 loss
         q2 = self.critic2(s, a)
         loss_q2 = F.mse_loss(q2, target)
-        self.critic2.optimizer.zero_grad(); loss_q2.backward(); self.critic2.optimizer.step()
+        self.critic2.optimizer.zero_grad(); loss_q2.backward()
+        torch.nn.utils.clip_grad_norm_(self.critic2.parameters(), max_norm=1.0)
+        self.critic2.optimizer.step()
 
         # ----- Actor Update -----
         a_curr, logp = self.actor.sample(s)
@@ -62,11 +66,15 @@ class Agent:
         q_pi = torch.min(q1_pi, q2_pi)
         alpha = self.log_alpha.exp()
         loss_pi = (alpha * logp - q_pi).mean()
-        self.actor.optimizer.zero_grad(); loss_pi.backward(); self.actor.optimizer.step()
+        self.actor.optimizer.zero_grad(); loss_pi.backward()
+        torch.nn.utils.clip_grad_norm_(self.actor.parameters(), max_norm=1.0)
+        self.actor.optimizer.step()
 
         # ----- Alpha Update -----
         loss_alpha = -(self.log_alpha * (logp + TARGET_ENTROPY).detach()).mean()
-        self.alpha_opt.zero_grad(); loss_alpha.backward(); self.alpha_opt.step()
+        self.alpha_opt.zero_grad(); loss_alpha.backward()
+        torch.nn.utils.clip_grad_norm_([self.log_alpha], max_norm=1.0)
+        self.alpha_opt.step()
 
         # ----- Soft Update of Target Networks -----
         with torch.no_grad():
